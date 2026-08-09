@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "E:\\Project Managmen software\\dev.bat",
+      "runtimeArgs": [],
+      "port": 3000
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  createdAt     DateTime @default(now())
+
+  memberships   WorkspaceMember[]
+  createdItems  Item[]             @relation("ItemCreatedBy")
+}
+
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  members WorkspaceMember[]
+  boards  Board[]
+}
+
+/// WorkspaceRole: "OWNER" | "MEMBER"
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  role        String    @default("MEMBER")
+  joinedAt    DateTime  @default(now())
+
+  @@unique([workspaceId, userId])
+}
+
+model Board {
+  id          String   @id @default(cuid())
+  name        String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  groups  Group[]
+  columns Column[]
+}
+
+model Group {
+  id       String @id @default(cuid())
+  name     String
+  color    String @default("#579bfc")
+  board    Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId  String
+  position Int    @default(0)
+
+  items Item[]
+}
+
+model Item {
+  id        String   @id @default(cuid())
+  name      String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   String
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  createdBy   User?   @relation("ItemCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+
+  parentItem   Item?   @relation("ItemSubItems", fields: [parentItemId], references: [id], onDelete: Cascade)
+  parentItemId String?
+  subItems     Item[]  @relation("ItemSubItems")
+
+  columnValues ColumnValue[]
+}
+
+/// ColumnType: "TEXT" | "STATUS" | "PERSON" | "DATE" | "NUMBER"
+model Column {
+  id       String @id @default(cuid())
+  name     String
+  type     String
+  board    Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId  String
+  position Int    @default(0)
+  // JSON-encoded config, e.g. status label/color options
+  options  String?
+
+  columnValues ColumnValue[]
+}
+
+model ColumnValue {
+  id       String @id @default(cuid())
+  item     Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId   String
+  column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  columnId String
+  // raw value: text, ISO date, number-as-string, status label, or person userId
+  value    String?
+
+  @@unique([itemId, columnId])
+}

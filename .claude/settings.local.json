@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"E:/Project Managmen software/src/lib\" \"E:/Project Managmen software/src/app/api/auth/[...nextauth]\" \"E:/Project Managmen software/src/app/\\(auth\\)/login\" \"E:/Project Managmen software/src/app/\\(auth\\)/signup\")",
+      "Bash(mkdir -p \"E:/Project Managmen software/src/app/board/[boardId]\")",
+      "Bash(git add *)"
+    ]
+  }
+}
