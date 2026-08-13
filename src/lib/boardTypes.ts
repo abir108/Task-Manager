@@ -19,13 +19,16 @@ export type BoardColumnValue = {
   value: string | null;
 };
 
-export type BoardItem = {
+export type BoardSubItem = {
   id: string;
   name: string;
   position: number;
   groupId: string;
   columnValues: BoardColumnValue[];
-  subItems: BoardItem[];
+};
+
+export type BoardItem = BoardSubItem & {
+  subItems: BoardSubItem[];
 };
 
 export type BoardGroup = {

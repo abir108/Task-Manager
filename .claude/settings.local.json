@@ -3,7 +3,12 @@
     "allow": [
       "Bash(mkdir -p \"E:/Project Managmen software/src/lib\" \"E:/Project Managmen software/src/app/api/auth/[...nextauth]\" \"E:/Project Managmen software/src/app/\\(auth\\)/login\" \"E:/Project Managmen software/src/app/\\(auth\\)/signup\")",
       "Bash(mkdir -p \"E:/Project Managmen software/src/app/board/[boardId]\")",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(\"/c/Program Files/nodejs/node.exe\" -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('base64'\\)\\)\")"
     ]
   }
 }
